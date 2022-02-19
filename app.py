@@ -1,36 +1,51 @@
-# DOWNLOAD FLASK -- !!!ONLY DO THIS ONCE!!!
-    # 1.) Open "Terminal"
-    # 2.) Install flask module by typing "pip install flask"
-    # 3.) If necessary for your machine or if prompted, download 
-    #     the additional package by typing "pip install psycopg2-binary"
-
-    # 4.) That's it, You're done!
-
-# CREATE A NEW PYTHON FILE
-    # 1.) Create a new python file using VSCode
-    # 2.) Name the file "app.py"
-            # 2.5.) You can name ^ this python file whatever you want .py, 
-            # just remember that your command line inputs will be different!
-            # Viewable down below \/
+# Import Dependencies
+import datetime as dt
+import numpy as np
+import pandas as pd
 
 
-# IMPORT FLASK
-from flask import Flask
+# IMPORT SQLite Database-Necessary Dependencies
+import sqlalchemy 
+from sqlalchemy.ext.automap import automap_base
+from sqlalchemy.orm import Session
+from sqlalchemy import create_engine, func
 
-# CREATE A NEW FLASK APP INSTANCE
+
+# IMPORT Flask - import these right after SQLAlchemy dependencies
+from flask import Flask, jsonify
+
+
+# CREATE THE ENGINE
+engine = create_engine("sqlite:///hawaii.sqlite")
+
+
+# REFLECT THE DATABASE & CREATING CLASSES/COLUMNS
+    # 1.) DEVELOP THE BASE
+Base = automap_base()
+    # 2.) REFLECT THE DATABASE ONTO THE BASE USING Base.prepare()
+Base.prepare(engine, reflect=True)
+    # 3.) DEVELOP YOUR COLUMN/CLASS VARIABLES FOR REFERRAL
+Measurement = Base.classes.measurement
+Station = Base.classes.station
+    # 4.) QUEUE UP A DATABASE SESSION LINK
+session = Session(engine)
+
+
+# SET UP Flask
 app = Flask(__name__)
 
-# CREATE OUR STARTING FLASK ROUTE using @app.route('/')
+
+# ESTABLISH Flask ROUTES AFTER APP SET UP
+# ESTABLISH A HOME PAGE WHICH WILL FUNCTION AS 
+# THE CENTRAL TERMINAL FOR OUR DATA ANALYSIS RESULTS
 @app.route('/')
-
-# CREATE A FUNCTION WITHIN THAT ROUTE BY PLACING IT UNDER THE ROUTE @app.route('')
-def hello_world():
-    return 'Hello World'
-
-# HOW TO RUN OUR FLASK APP
-    # 1.) Navigate to the directory that the app is in with the command line
-    # 2.) Write "export FLASK_APP=app.py" in the command line
-    # 3.) Write "set FLASK_APP=app.py" in the command line
-    # 4.) Write "flask run" in the command line
-
-# 🎉 Congratulations! You've successfully created your own locally-hosted website
+def welcome():
+    return(
+        '''
+        Welcome to the Climate ANalysis API!
+        Available Routes:
+        /api/v1.0/precipitation
+        /api/v1.0/stations
+        /api/v1.0/tobs
+        /api/v1.0/temp/start/end       
+        ''')
