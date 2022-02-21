@@ -93,7 +93,7 @@ def stats(start=None, end=None):
         filter(Measurement.date <= end).all()
     temps = list(np.ravel(results))
     return jsonify(temps)
-# ^ TO ACCESS DATA IN THIS ROUTE YOU HAVE TO IUNPUT A START AND END DATE
+# ^ TO ACCESS DATA IN THIS ROUTE YOU HAVE TO INPUT A START AND END DATE
 # DO THIS BY INPUTTING YOUR DATES INTO THE LOCALHOST URL
 # EXAMPLE: http://127.0.0.1:5000/api/v1.0/temp/2017-06-01/2017-06-30
 
